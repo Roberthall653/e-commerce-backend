@@ -37,14 +37,56 @@ router.get('/:id', async (req, res) => {
 
 router.post('/', (req, res) => {
   // create a new category
+  /*  Template for Testing post route  
+  {
+       "category_name": "Sports",
+     }
+  */
+  Category.create({
+    category_name: req.body.category_name,
+  })
+    .then((newCategory) => {
+      // Send the newly created row as a JSON object
+      res.json(newCategory);
+    })
+    .catch((err) => {
+      res.json(err);
+    });
+
 });
 
 router.put('/:id', (req, res) => {
   // update a category by its `id` value
+  Category.update(
+    {
+      // All the fields you can update and the data attached to the request body.
+      category_name: req.body.category_name,
+    },
+    {
+      // Gets the Categorys based on the isbn given in the request parameters
+      where: {
+        id: req.params.id,
+      },
+    }
+  )
+    .then((updatedCategory) => {
+      // Sends the updated Category as a json response
+      res.json(updatedCategory);
+    })
+    .catch((err) => res.json(err));
 });
 
 router.delete('/:id', (req, res) => {
   // delete a category by its `id` value
+  Category.destroy({
+    where: {
+      id: req.params.id,
+    },
+  })
+    .then((deletedCategory) => {
+      res.json(deletedCategory);
+    })
+    .catch((err) => res.json(err));
 });
 
 module.exports = router;
